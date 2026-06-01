@@ -1,3 +1,5 @@
+import { schedule } from './scheduler.js';
+
 export function createStore(initial) {
   let state = structuredClone(initial);
   const listeners = new Set();
@@ -8,7 +10,7 @@ export function createStore(initial) {
     },
     set(updater) {
       state = updater(state);
-      listeners.forEach((fn) => fn(state));
+      listeners.forEach((fn) => schedule(fn, state));
     },
     subscribe(fn) {
       listeners.add(fn);
