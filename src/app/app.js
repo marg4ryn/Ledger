@@ -32,10 +32,10 @@ function createExpenseElement({ id, name, price }) {
   nameSpan.textContent = name;
 
   const priceSpan = document.createElement('span');
-  priceSpan.textContent =
-    Number(price).toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-    }) + ' $';
+  priceSpan.textContent = Number(price).toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
 
   li.appendChild(nameSpan);
   li.appendChild(priceSpan);
