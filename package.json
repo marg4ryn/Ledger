@@ -1,23 +1,23 @@
 {
-  "name": "expenses-list",
+  "name": "expensesframe",
   "version": "1.0.0",
-  "description": "immutable updates\r event delegation\r storage\r podział state / render / action\r defensywne kopiowanie\r guard clause / early return",
+  "description": "a simple reactive ui framework written in vanilla js",
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marg4ryn/Expenses-List.git"
+    "url": "git+https://github.com/marg4ryn/ExpensesFrame.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/marg4ryn/Expenses-List/issues"
+    "url": "https://github.com/marg4ryn/ExpensesFrame/issues"
   },
-  "homepage": "https://github.com/marg4ryn/Expenses-List#readme",
+  "homepage": "https://github.com/marg4ryn/ExpensesFrame#readme",
   "devDependencies": {
     "@eslint/css": "^1.2.0",
     "@eslint/js": "^10.0.1",
