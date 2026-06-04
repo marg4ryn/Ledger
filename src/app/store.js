@@ -1,5 +1,5 @@
-import { createStore } from '../framework/store.js';
-import { storage } from './storage.js';
+import { createStore } from '@framework/store.js';
+import { storage } from '@app/storage.js';
 
 export const store = createStore({
   expenses: storage.load(),

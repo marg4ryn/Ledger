@@ -1,4 +1,4 @@
-import { schedule } from './scheduler.js';
+import { schedule } from '@framework/scheduler.js';
 
 export function createStore(initial) {
   let state = structuredClone(initial);

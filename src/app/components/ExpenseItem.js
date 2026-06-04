@@ -1,5 +1,5 @@
-import { h } from '../../framework/vdom.js';
-import { actions } from '../store.js';
+import { h } from '@framework/vdom.js';
+import { actions } from '@app/store.js';
 
 function formatPrice(price) {
   return Number(price).toLocaleString('en-US', {

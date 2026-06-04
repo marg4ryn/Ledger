@@ -1,4 +1,4 @@
-import { createElement, patch } from './vdom.js';
+import { createElement, patch } from '@framework/vdom.js';
 
 export function createComponent(store, render) {
   let oldVnode = null;

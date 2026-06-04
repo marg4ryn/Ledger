@@ -1,6 +1,6 @@
-import { h } from '../../framework/vdom.js';
-import { actions } from '../store.js';
-import { ExpenseItem } from './ExpenseItem.js';
+import { h } from '@framework/vdom.js';
+import { actions } from '@app/store.js';
+import { ExpenseItem } from '@components/ExpenseItem.js';
 
 function handleNameSort() {
   actions.setSort('name');
