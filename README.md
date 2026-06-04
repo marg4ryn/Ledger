@@ -137,13 +137,19 @@ h('button', { onclick: handleClick }, 'Kliknij');
 
 ## Launch
 
-No dependencies or bundler required.
+Install TypeScript:
 
 ```bash
-# e.g., via Live Server in VS Code
-# or
-npx serve .
+npm install typescript --save-dev
 ```
+
+Run TypeScript in watch mode:
+
+```bash
+npm run watch
+```
+
+Open the application using Live Server in VS Code (or any static server) to serve `index.html`. The browser loads compiled files from `/dist`, which are continuously updated by the TypeScript watcher.
 
 ---
 
