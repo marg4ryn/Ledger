@@ -10,7 +10,7 @@ export function createStore(initial) {
     },
     set(updater) {
       state = updater(state);
-      listeners.forEach((fn) => schedule(fn, state));
+      listeners.forEach((fn) => schedule(() => fn(state)));
     },
     subscribe(fn) {
       listeners.add(fn);
