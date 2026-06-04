@@ -1,5 +1,5 @@
 {
-  "name": "expensesframe",
+  "name": "ledger",
   "version": "1.0.0",
   "description": "a simple reactive ui framework written in vanilla js",
   "main": "script.js",
@@ -8,16 +8,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marg4ryn/ExpensesFrame.git"
+    "url": "git+https://github.com/marg4ryn/Ledger.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/marg4ryn/ExpensesFrame/issues"
+    "url": "https://github.com/marg4ryn/Ledger/issues"
   },
-  "homepage": "https://github.com/marg4ryn/ExpensesFrame#readme",
+  "homepage": "https://github.com/marg4ryn/Ledger#readme",
   "devDependencies": {
     "@eslint/css": "^1.2.0",
     "@eslint/js": "^10.0.1",

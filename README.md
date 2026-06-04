@@ -4,7 +4,7 @@
 - tests
 - improve responsiveness
 
-# ExpensesFrame
+# Ledger
 
 A simple reactive UI framework written in vanilla JavaScript. An educational project demonstrating how modern reactive frameworks work.
 
