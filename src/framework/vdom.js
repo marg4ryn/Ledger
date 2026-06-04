@@ -1,4 +1,4 @@
-export function h(type, props, children) {
+export function h(type, props, ...children) {
   return {
     type,
     props: props || {},
@@ -7,7 +7,11 @@ export function h(type, props, children) {
 }
 
 export function createElement(vnode) {
-  if (typeof vnode === String || typeof vnode === Number) {
+  if (vnode == null) {
+    return document.createTextNode('');
+  }
+
+  if (typeof vnode === 'string' || typeof vnode === 'number') {
     return document.createTextNode(vnode);
   }
 
@@ -48,8 +52,8 @@ export function patch(parent, newVnode, oldVnode, index = 0) {
 
   patchProps(currentEl, newVnode.props, oldVnode.props);
 
-  const newLength = newVnode.children.length;
-  const oldLength = oldVnode.children.length;
+  const newLength = newVnode.children?.length ?? 0;
+  const oldLength = oldVnode.children?.length ?? 0;
   const max = Math.max(newLength, oldLength);
 
   for (let i = max - 1; i >= 0; i--) {
@@ -67,7 +71,7 @@ function changed(newVnode, oldVnode) {
   return false;
 }
 
-function patchProps(el, newProps, oldProps) {
+function patchProps(el, newProps = {}, oldProps = {}) {
   // remove deprecated attributes
   Object.keys(oldProps).forEach((key) => {
     if (!(key in newProps)) {
