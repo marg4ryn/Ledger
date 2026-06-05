@@ -42,7 +42,7 @@ index.html
 Reactive closure-based state. Any change via `set` automatically notifies subscribers.
 
 ```typescript
-import { createStore } from '@framework/store.ts';
+import { createStore } from '@framework/store.js';
 
 type CounterStore = { count: number };
 
@@ -65,7 +65,7 @@ API:
 Virtual DOM - describes the UI as plain TS objects, only updates changed nodes.
 
 ```typescript
-import { h, createElement, patch } from '@framework/vdom.ts';
+import { h, createElement, patch } from '@framework/vdom.js';
 
 // creating a vDOM node
 const vnode = h(
@@ -93,7 +93,7 @@ API:
 Collects state changes and renders once per frame via `requestAnimationFrame`. Prevents multiple renderings on multiple state changes in the same frame.
 
 ```typescript
-import { schedule } from '@framework/scheduler.ts';
+import { schedule } from '@framework/scheduler.js';
 
 schedule(() => render(store.get()));
 ```
@@ -103,7 +103,7 @@ schedule(() => render(store.get()));
 Combines the store with the vDOM. Creates the DOM on the first render, and diffs on subsequent renders.
 
 ```typescript
-import { createComponent } from '@framework/component.ts';
+import { createComponent } from '@framework/component.js';
 
 const app = createComponent(store, AppComponent);
 app.mount(document.getElementById('app'));
