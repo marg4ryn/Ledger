@@ -1,16 +1,25 @@
 import { h } from '@framework/vdom.js';
 import { actions } from '@app/store.js';
+import { VElement } from '@framework/types.js';
 
-function handleSubmit(e) {
+function handleSubmit(e: SubmitEvent): void {
   e.preventDefault();
-  const name = e.target.elements.name.value.trim();
-  const price = Number(e.target.elements.price.value);
+
+  const form = e.currentTarget as HTMLFormElement;
+  const nameInput = form.elements.namedItem('name') as HTMLInputElement;
+  const priceInput = form.elements.namedItem('price') as HTMLInputElement;
+
+  const name = nameInput.value.trim();
+  const price = Number(priceInput.value);
+
   if (!name || price <= 0) return;
+
   actions.addExpense(name, price);
-  e.target.reset();
+
+  form.reset();
 }
 
-export function ExpenseForm() {
+export function ExpenseForm(): VElement {
   return h(
     'section',
     { class: 'right' },

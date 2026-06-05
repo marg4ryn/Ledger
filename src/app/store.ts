@@ -1,14 +1,15 @@
 import { createStore } from '@framework/store.js';
 import { storage } from '@app/storage.js';
+import { SortBy, ExpenseStore } from './types.js';
 
-export const store = createStore({
+export const store = createStore<ExpenseStore>({
   expenses: storage.load(),
   filter: '',
   sort: { by: 'name', asc: true },
 });
 
 export const actions = {
-  addExpense(name, price) {
+  addExpense(name: string, price: number): void {
     store.set((state) => ({
       ...state,
       expenses: [
@@ -23,7 +24,7 @@ export const actions = {
     storage.save(store.get().expenses);
   },
 
-  removeExpense(id) {
+  removeExpense(id: string): void {
     store.set((state) => ({
       ...state,
       expenses: state.expenses.filter((e) => e.id !== id),
@@ -31,11 +32,11 @@ export const actions = {
     storage.save(store.get().expenses);
   },
 
-  setFilter(value) {
+  setFilter(value: string): void {
     store.set((state) => ({ ...state, filter: value }));
   },
 
-  setSort(by) {
+  setSort(by: SortBy): void {
     store.set((state) => ({
       ...state,
       sort: {

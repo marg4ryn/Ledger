@@ -2,7 +2,7 @@ export type VNode = VElement | string | number;
 
 export interface VElement {
   type: string;
-  props: Record<string, unknown>;
+  props: Record<string, unknown> | null;
   children: VNode[];
 }
 

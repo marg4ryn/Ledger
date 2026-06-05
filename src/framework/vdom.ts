@@ -2,12 +2,12 @@ import type { VNode, VElement } from '@framework/types.js';
 
 export function h(
   type: string,
-  props?: Record<string, unknown>,
+  props: Record<string, unknown> | null = null,
   ...children: VNode[]
 ): VElement {
   return {
     type,
-    props: props || {},
+    props: props ?? {},
     children: children.flat() as VNode[],
   };
 }
@@ -19,13 +19,15 @@ export function createElement(vnode: VNode): HTMLElement | Text {
 
   const el = document.createElement(vnode.type);
 
-  Object.entries(vnode.props).forEach(([key, value]) => {
-    if (key.startsWith('on')) {
-      el.addEventListener(key.slice(2).toLowerCase(), value as EventListener);
-    } else {
-      el.setAttribute(key, value as string);
-    }
-  });
+  if (vnode.props) {
+    Object.entries(vnode.props).forEach(([key, value]) => {
+      if (key.startsWith('on')) {
+        el.addEventListener(key.slice(2).toLowerCase(), value as EventListener);
+      } else {
+        el.setAttribute(key, value as string);
+      }
+    });
+  }
 
   vnode.children.forEach((child) => {
     el.appendChild(createElement(child));
@@ -90,34 +92,40 @@ function changed(newVnode: VNode, oldVnode: VNode): boolean {
 
 function patchProps(
   el: HTMLElement,
-  newProps: Record<string, unknown> = {},
-  oldProps: Record<string, unknown> = {},
+  newProps: Record<string, unknown> | null = null,
+  oldProps: Record<string, unknown> | null = null,
 ): void {
   // remove deprecated attributes
-  Object.keys(oldProps).forEach((key) => {
-    if (!(key in newProps)) {
-      if (key.startsWith('on')) {
-        el.removeEventListener(
-          key.slice(2).toLowerCase(),
-          oldProps[key] as EventListener,
-        );
-      } else {
-        el.removeAttribute(key);
+  if (oldProps) {
+    Object.keys(oldProps).forEach((key) => {
+      if (newProps && !(key in newProps)) {
+        if (key.startsWith('on')) {
+          el.removeEventListener(
+            key.slice(2).toLowerCase(),
+            oldProps[key] as EventListener,
+          );
+        } else {
+          el.removeAttribute(key);
+        }
       }
-    }
-  });
+    });
+  }
 
   // add new attributes
-  Object.entries(newProps).forEach(([key, value]) => {
-    if (oldProps[key] === value) return;
-    if (key.startsWith('on')) {
-      el.removeEventListener(
-        key.slice(2).toLowerCase(),
-        oldProps[key] as EventListener,
-      );
-      el.addEventListener(key.slice(2).toLowerCase(), value as EventListener);
-    } else {
-      el.setAttribute(key, value as string);
-    }
-  });
+  if (newProps) {
+    Object.entries(newProps).forEach(([key, value]) => {
+      if (oldProps && oldProps[key] === value) return;
+      if (key.startsWith('on')) {
+        if (oldProps) {
+          el.removeEventListener(
+            key.slice(2).toLowerCase(),
+            oldProps[key] as EventListener,
+          );
+        }
+        el.addEventListener(key.slice(2).toLowerCase(), value as EventListener);
+      } else {
+        el.setAttribute(key, value as string);
+      }
+    });
+  }
 }

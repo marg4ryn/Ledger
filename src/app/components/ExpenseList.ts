@@ -1,26 +1,30 @@
 import { h } from '@framework/vdom.js';
 import { actions } from '@app/store.js';
-import { ExpenseItem } from '@components/ExpenseItem.js';
+import { ExpenseItem } from '@app/components/ExpenseItem.js';
+import { ExpenseStore, Expense } from '@app/types.js';
+import { VElement } from '@framework/types.js';
 
-function handleNameSort() {
+function handleNameSort(): void {
   actions.setSort('name');
 }
 
-function handlePriceSort() {
+function handlePriceSort(): void {
   actions.setSort('price');
 }
 
-function handleFilter(e) {
-  actions.setFilter(e.target.value.trim().toLowerCase());
+function handleFilter(e: InputEvent): void {
+  const input = e.currentTarget as HTMLInputElement;
+  actions.setFilter(input.value.trim().toLowerCase());
 }
 
-function handleRemove(e) {
-  const li = e.target.closest('li');
+function handleRemove(e: MouseEvent): void {
+  const target = e.currentTarget as HTMLElement;
+  const li = target.closest('li') as HTMLLIElement | null;
   if (!li) return;
-  actions.removeExpense(li.dataset.id);
+  actions.removeExpense(li.dataset.id!);
 }
 
-function getVisibleExpenses(state) {
+function getVisibleExpenses(state: ExpenseStore): Expense[] {
   return [...state.expenses]
     .filter((e) => e.name.toLowerCase().includes(state.filter))
     .sort((a, b) => {
@@ -31,7 +35,7 @@ function getVisibleExpenses(state) {
     });
 }
 
-export function ExpenseList(state) {
+export function ExpenseList(state: ExpenseStore): VElement {
   const visible = getVisibleExpenses(state);
 
   return h(
