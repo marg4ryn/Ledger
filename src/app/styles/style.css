@@ -64,8 +64,9 @@ main {
 }
 
 .btnContainer {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-areas: 'sortByNameBtn filterContainer sortByPriceBtn';
+  grid-template-columns: min-content auto min-content;
   gap: 0.75rem;
 }
 
@@ -85,6 +86,14 @@ main {
   white-space: nowrap;
 }
 
+#sortByNameBtn {
+  grid-area: sortByNameBtn;
+}
+
+#sortByPriceBtn {
+  grid-area: sortByPriceBtn;
+}
+
 .button:hover {
   background: var(--color-bg);
   border-color: #c8c6c0;
@@ -95,6 +104,7 @@ main {
 }
 
 .filterContainer {
+  grid-area: filterContainer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -280,5 +290,12 @@ form button[type='submit']:active {
 
   .right {
     order: -1;
+  }
+
+  .btnContainer {
+    grid-template-areas:
+      'sortByNameBtn sortByPriceBtn'
+      'filterContainer filterContainer';
+    grid-template-columns: auto auto;
   }
 }

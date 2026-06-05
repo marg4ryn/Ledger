@@ -1,8 +1,8 @@
 {
   "name": "ledger",
   "version": "1.0.0",
-  "description": "a simple reactive ui framework written in vanilla js",
-  "main": "script.js",
+  "description": "a simple reactive ui framework written in vanilla ts",
+  "main": "src/app/main.ts",
   "scripts": {
     "test": "vitest",
     "build": "tsc",
