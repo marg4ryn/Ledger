@@ -1,14 +1,4 @@
-type VNode = VElement | string | number;
-
-type VElement = {
-  type: string;
-  props: Record<string, unknown>;
-  children: VNode[];
-};
-
-function isVElement(vnode: VNode): vnode is VElement {
-  return typeof vnode === 'object';
-}
+import type { VNode, VElement } from '@framework/types.js';
 
 export function h(
   type: string,
@@ -80,6 +70,10 @@ export function patch(
       patch(currentEl, newVnode.children[i], oldVnode.children[i], i);
     }
   }
+}
+
+function isVElement(vnode: VNode): vnode is VElement {
+  return typeof vnode === 'object';
 }
 
 function changed(newVnode: VNode, oldVnode: VNode): boolean {

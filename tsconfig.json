@@ -13,7 +13,13 @@
     "checkJs": false,
 
     "sourceMap": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    "paths": {
+      "@framework/*": ["./src/framework/*"],
+      "@app/*": ["./src/app/*"],
+      "@components/*": ["./src/app/components/*"]
+    }
   },
   "include": ["src"]
 }

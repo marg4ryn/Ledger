@@ -1,8 +1,9 @@
 import { schedule } from '@framework/scheduler.js';
+import type { Listener, Store } from '@framework/types.js';
 
-export function createStore(initial) {
+export function createStore<T>(initial: T): Store<T> {
   let state = structuredClone(initial);
-  const listeners = new Set();
+  const listeners = new Set<Listener<T>>();
 
   return {
     get() {
