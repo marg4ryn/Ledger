@@ -1,34 +1,35 @@
 ## To Do
 
-- rewrite to TypeScript
 - tests
 - improve responsiveness
 
 # Ledger
 
-A simple reactive UI framework written in vanilla JavaScript. An educational project demonstrating how modern reactive frameworks work.
+A simple reactive UI framework written in vanilla TypeScript. An educational project demonstrating how modern reactive frameworks work.
 
 ## Architecture
 
 ```
 src/
   framework/
-    store.js       ← reactive state
-    vdom.js        ← virtual DOM
-    scheduler.js   ← renders batching
-    component.js   ← component abstraction
+    store.ts       ← reactive state
+    vdom.ts        ← virtual DOM
+    scheduler.ts   ← renders batching
+    component.ts   ← component abstraction
+    types.ts       ← TypeScript types
   app/
     components/
-      App.js
-      ExpenseList.js
-      ExpenseForm.js
-      ExpenseItem.js
-      ExpenseHeader.js
+      App.ts
+      ExpenseList.ts
+      ExpenseForm.ts
+      ExpenseItem.ts
+      ExpenseHeader.ts
     styles/
       style.css
-    store.js       ← application state and actions
-    storage.js     ← persistence in localStorage
-    main.js        ← entry point
+    store.ts       ← application state and actions
+    storage.ts     ← persistence in localStorage
+    types.ts       ← TypeScript types
+    main.ts        ← entry point
 index.html
 ```
 
@@ -36,14 +37,16 @@ index.html
 
 ## Framework modules
 
-### store.js
+### store.ts
 
 Reactive closure-based state. Any change via `set` automatically notifies subscribers.
 
-```javascript
-import { createStore } from '@framework/store.js';
+```typescript
+import { createStore } from '@framework/store.ts';
 
-const store = createStore({ count: 0 });
+type CounterStore = { count: number };
+
+const store = createStore<CounterStore>({ count: 0 });
 
 store.subscribe((state) => console.log(state.count));
 
@@ -57,12 +60,12 @@ API:
 - `set(updater)` — accepts the `state => newState` function, updates the state, and notifies subscribers
 - `subscribe(fn)` — registers a listener, returns a function for unsubscribing
 
-### vdom.js
+### vdom.ts
 
-Virtual DOM - describes the UI as plain JS objects, only updates changed nodes.
+Virtual DOM - describes the UI as plain TS objects, only updates changed nodes.
 
-```javascript
-import { h, createElement, patch } from '@framework/vdom.js';
+```typescript
+import { h, createElement, patch } from '@framework/vdom.ts';
 
 // creating a vDOM node
 const vnode = h(
@@ -85,22 +88,22 @@ API:
 - `createElement(vnode)` — converts a vDOM to a DOM node
 - `patch(parent, newVnode, oldVnode, index)` — compares and updates the DOM
 
-### scheduler.js
+### scheduler.ts
 
 Collects state changes and renders once per frame via `requestAnimationFrame`. Prevents multiple renderings on multiple state changes in the same frame.
 
-```javascript
-import { schedule } from '@framework/scheduler.js';
+```typescript
+import { schedule } from '@framework/scheduler.ts';
 
 schedule(() => render(store.get()));
 ```
 
-### component.js
+### component.ts
 
 Combines the store with the vDOM. Creates the DOM on the first render, and diffs on subsequent renders.
 
-```javascript
-import { createComponent } from '@framework/component.js';
+```typescript
+import { createComponent } from '@framework/component.ts';
 
 const app = createComponent(store, AppComponent);
 app.mount(document.getElementById('app'));
@@ -117,7 +120,7 @@ API:
 
 A component is a function that accepts state and returns a vDOM:
 
-```javascript
+```typescript
 function MyComponent(state) {
   return h('div', { class: 'container' }, h('p', null, state.message));
 }
@@ -125,12 +128,12 @@ function MyComponent(state) {
 
 Events are passed through props with the prefix `on`:
 
-```javascript
+```typescript
 function handleClick() {
   actions.doSomething();
 }
 
-h('button', { onclick: handleClick }, 'Kliknij');
+h('button', { onclick: handleClick }, 'Click me!');
 ```
 
 ---
