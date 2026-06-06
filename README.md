@@ -1,8 +1,3 @@
-## To Do
-
-- tests
-- improve responsiveness
-
 # Ledger
 
 A simple reactive UI framework written in vanilla TypeScript. An educational project demonstrating how modern reactive frameworks work.

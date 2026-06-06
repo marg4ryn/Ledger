@@ -19,15 +19,13 @@ export function createElement(vnode: VNode): HTMLElement | Text {
 
   const el = document.createElement(vnode.type);
 
-  if (vnode.props) {
-    Object.entries(vnode.props).forEach(([key, value]) => {
-      if (key.startsWith('on')) {
-        el.addEventListener(key.slice(2).toLowerCase(), value as EventListener);
-      } else {
-        el.setAttribute(key, value as string);
-      }
-    });
-  }
+  Object.entries(vnode.props).forEach(([key, value]) => {
+    if (key.startsWith('on')) {
+      el.addEventListener(key.slice(2).toLowerCase(), value as EventListener);
+    } else {
+      el.setAttribute(key, value as string);
+    }
+  });
 
   vnode.children.forEach((child) => {
     el.appendChild(createElement(child));
@@ -38,14 +36,14 @@ export function createElement(vnode: VNode): HTMLElement | Text {
 
 export function patch(
   parent: HTMLElement,
-  newVnode?: VNode,
-  oldVnode?: VNode,
-  index: number = 0,
+  newVnode: VNode | null | undefined,
+  oldVnode: VNode | null | undefined,
+  index: number,
 ): void {
   const currentEl = parent.childNodes[index] as HTMLElement;
 
   if (!oldVnode) {
-    if (newVnode !== undefined) {
+    if (newVnode) {
       parent.appendChild(createElement(newVnode));
     }
     return;

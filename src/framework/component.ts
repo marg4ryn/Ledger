@@ -11,6 +11,7 @@ export function createComponent<T>(
   function update(state: T): void {
     const newVnode = render(state);
 
+    // TODO simplify
     if (!oldVnode) {
       // first render - create DOM from vDOM
       container!.appendChild(createElement(newVnode));
