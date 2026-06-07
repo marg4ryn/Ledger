@@ -1,5 +1,11 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { h, createElement, patch } from '../../src/framework/vdom';
+import {
+  h,
+  createElement,
+  changed,
+  patch,
+  patchProps,
+} from '../../src/framework/vdom';
 
 describe('h', () => {
   it('creates a VElement with proper type', () => {
@@ -162,11 +168,10 @@ describe('changed', () => {
   it('returns true when node types differ', () => {
     const oldVnode = 'text';
     const newVnode = h('span', null);
-    parent.appendChild(document.createTextNode('text'));
 
-    patch(parent, newVnode, oldVnode, 0);
+    const res = changed(newVnode, oldVnode);
 
-    expect(parent.firstElementChild?.tagName).toBe('SPAN');
+    expect(res).toBeTruthy();
   });
 
   it('returns true when strings differ', () => {
@@ -182,33 +187,28 @@ describe('changed', () => {
   it('returns false when strings are equal', () => {
     const oldVnode = 'foo';
     const newVnode = 'foo';
-    parent.appendChild(document.createTextNode('foo'));
-    const nodeBefore = parent.firstChild;
 
-    patch(parent, newVnode, oldVnode, 0);
+    const res = changed(newVnode, oldVnode);
 
-    expect(parent.firstChild).toBe(nodeBefore);
+    expect(res).toBeFalsy();
   });
 
   it('returns true when element tags differ', () => {
     const oldVnode = h('p', null);
     const newVnode = h('span', null);
-    parent.appendChild(document.createElement('p'));
 
-    patch(parent, newVnode, oldVnode, 0);
+    const res = changed(newVnode, oldVnode);
 
-    expect(parent.firstElementChild?.tagName).toBe('SPAN');
+    expect(res).toBeTruthy();
   });
 
   it('returns false when element tags are equal', () => {
     const oldVnode = h('div', null);
     const newVnode = h('div', { class: 'x' });
-    const el = document.createElement('div');
-    parent.appendChild(el);
 
-    patch(parent, newVnode, oldVnode, 0);
+    const res = changed(newVnode, oldVnode);
 
-    expect(parent.firstElementChild).toBe(el);
+    expect(res).toBeFalsy();
   });
 });
 
@@ -217,13 +217,12 @@ describe('patchProps', () => {
     const handleClick = vi.fn();
     const oldVnode = h('p', { class: 'foo', onclick: handleClick });
     const newVnode = h('p', null);
-    const vnode = h('div', null, oldVnode);
-    const el = createElement(vnode) as HTMLElement;
+    const el = createElement(oldVnode) as HTMLElement;
 
-    patch(el, newVnode, oldVnode, 0);
-    (el.firstElementChild as HTMLElement)?.click();
+    patchProps(el, newVnode.props, oldVnode.props);
+    el.click();
 
-    expect(el.firstElementChild?.getAttribute('class')).toBeNull;
+    expect(el.getAttribute('class')).toBeNull();
     expect(handleClick).not.toHaveBeenCalled();
   });
 
@@ -231,13 +230,12 @@ describe('patchProps', () => {
     const handleClick = vi.fn();
     const oldVnode = h('p', null);
     const newVnode = h('p', { class: 'foo', onclick: handleClick });
-    const vnode = h('div', null, oldVnode);
-    const el = createElement(vnode) as HTMLElement;
+    const el = createElement(oldVnode) as HTMLElement;
 
-    patch(el, newVnode, oldVnode, 0);
-    (el.firstElementChild as HTMLElement)?.click();
+    patchProps(el, newVnode.props, oldVnode.props);
+    el.click();
 
-    expect(el.firstElementChild?.getAttribute('class')).toBe('foo');
+    expect(el.getAttribute('class')).toBe('foo');
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 });

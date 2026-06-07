@@ -10,15 +10,7 @@ export function createComponent<T>(
 
   function update(state: T): void {
     const newVnode = render(state);
-
-    if (!oldVnode) {
-      // first render - create DOM from vDOM
-      container!.appendChild(createElement(newVnode));
-    } else {
-      // subsequent renders - diffing
-      patch(container!, newVnode, oldVnode, 0);
-    }
-
+    patch(container!, newVnode, oldVnode, 0);
     oldVnode = newVnode;
   }
 

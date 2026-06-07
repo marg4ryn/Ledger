@@ -76,7 +76,7 @@ function isVElement(vnode: VNode): vnode is VElement {
   return typeof vnode === 'object';
 }
 
-function changed(newVnode: VNode, oldVnode: VNode): boolean {
+export function changed(newVnode: VNode, oldVnode: VNode): boolean {
   // different Node Type
   if (typeof newVnode !== typeof oldVnode) return true;
   // different String
@@ -88,7 +88,7 @@ function changed(newVnode: VNode, oldVnode: VNode): boolean {
   return false;
 }
 
-function patchProps(
+export function patchProps(
   el: HTMLElement,
   newProps: Record<string, unknown> | null = null,
   oldProps: Record<string, unknown> | null = null,

@@ -2,7 +2,7 @@ import { h } from '@framework/vdom.js';
 import { actions } from '@app/store.js';
 import { VElement } from '@framework/types.js';
 
-function handleSubmit(e: SubmitEvent): void {
+export function handleSubmit(e: SubmitEvent): void {
   e.preventDefault();
 
   const form = e.currentTarget as HTMLFormElement;
