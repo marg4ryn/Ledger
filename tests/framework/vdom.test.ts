@@ -4,26 +4,31 @@ import { h, createElement, patch } from '../../src/framework/vdom';
 describe('h', () => {
   it('creates a VElement with proper type', () => {
     const vnode = h('div', null);
+
     expect(vnode.type).toBe('div');
   });
 
   it('creates a VElement with proper props', () => {
     const vnode = h('div', { class: 'test' });
+
     expect(vnode.props).toStrictEqual({ class: 'test' });
   });
 
   it('creates a VElement without props', () => {
     const vnode = h('div', null);
+
     expect(vnode.props).toStrictEqual({});
   });
 
   it('creates a VElement without children', () => {
     const vnode = h('div', null);
+
     expect(vnode.children).toStrictEqual([]);
   });
 
   it('creates a VElement with multiple children', () => {
     const vnode = h('div', null, h('p', null), h('span', null));
+
     expect(vnode.children).toHaveLength(2);
     expect(vnode.children[0].type).toBe('p');
     expect(vnode.children[1].type).toBe('span');
@@ -32,6 +37,7 @@ describe('h', () => {
   it('flattens nested children arrays', () => {
     const children = [h('p', null), h('span', null)];
     const vnode = h('div', null, ...children);
+
     expect(vnode.children).toHaveLength(2);
     expect(vnode.children[0].type).toBe('p');
   });
@@ -40,31 +46,39 @@ describe('h', () => {
 describe('createElement', () => {
   it('creates a Text element', () => {
     const el = createElement('test');
+
     expect(el.textContent).toBe('test');
   });
 
   it('creates a Text element from a number', () => {
     const el = createElement(42);
+
     expect(el.textContent).toBe('42');
   });
 
   it('creates a HTMLElement with proper props', () => {
     const vnode = h('p', { class: 'test' });
+
     const el = createElement(vnode) as HTMLElement;
+
     expect(el.getAttribute('class')).toBe('test');
   });
 
   it('attaches event listeners', () => {
     const handleClick = vi.fn();
     const vnode = h('p', { onclick: handleClick });
+
     const el = createElement(vnode) as HTMLElement;
     el.click();
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('recursively creates and attaches HTMLElements', () => {
     const vnode = h('div', null, h('p', null));
+
     const el = createElement(vnode) as HTMLElement;
+
     expect(el.childNodes).toHaveLength(1);
     expect(el.firstElementChild?.tagName).toBe('P');
   });
@@ -75,7 +89,9 @@ describe('patch', () => {
     const newVnode = h('p', null);
     const vnode = h('div', null);
     const el = createElement(vnode) as HTMLElement;
+
     patch(el, newVnode, null, 0);
+
     expect(el.childNodes).toHaveLength(1);
     expect(el.firstElementChild?.tagName).toBe('P');
   });
@@ -84,7 +100,9 @@ describe('patch', () => {
     const oldVnode = h('p', null);
     const vnode = h('div', null, oldVnode);
     const el = createElement(vnode) as HTMLElement;
+
     patch(el, null, oldVnode, 0);
+
     expect(el.childNodes).toHaveLength(0);
   });
 
@@ -93,7 +111,9 @@ describe('patch', () => {
     const newVnode = h('span', null);
     const vnode = h('div', null, oldVnode);
     const el = createElement(vnode) as HTMLElement;
+
     patch(el, newVnode, oldVnode, 0);
+
     expect(el.childNodes).toHaveLength(1);
     expect(el.firstElementChild?.tagName).toBe('SPAN');
   });
@@ -103,7 +123,9 @@ describe('patch', () => {
     const newVnode = h('p', { class: 'bar' });
     const vnode = h('div', null, oldVnode);
     const el = createElement(vnode) as HTMLElement;
+
     patch(el, newVnode, oldVnode, 0);
+
     expect(el.firstElementChild?.getAttribute('class')).toBe('bar');
   });
 
@@ -122,7 +144,9 @@ describe('patch', () => {
     );
     const el = createElement(h('div', null, oldVnode)) as HTMLElement;
     const children = () => el.firstElementChild?.children;
+
     patch(el, newVnode, oldVnode, 0);
+
     expect(children()?.[0]?.getAttribute('class')).toBe('foo');
     expect(children()?.[1]?.getAttribute('class')).toBe('bar');
   });
@@ -139,7 +163,9 @@ describe('changed', () => {
     const oldVnode = 'text';
     const newVnode = h('span', null);
     parent.appendChild(document.createTextNode('text'));
+
     patch(parent, newVnode, oldVnode, 0);
+
     expect(parent.firstElementChild?.tagName).toBe('SPAN');
   });
 
@@ -147,7 +173,9 @@ describe('changed', () => {
     const oldVnode = 'foo';
     const newVnode = 'bar';
     parent.appendChild(document.createTextNode('foo'));
+
     patch(parent, newVnode, oldVnode, 0);
+
     expect(parent.firstChild?.textContent).toBe('bar');
   });
 
@@ -156,7 +184,9 @@ describe('changed', () => {
     const newVnode = 'foo';
     parent.appendChild(document.createTextNode('foo'));
     const nodeBefore = parent.firstChild;
+
     patch(parent, newVnode, oldVnode, 0);
+
     expect(parent.firstChild).toBe(nodeBefore);
   });
 
@@ -164,7 +194,9 @@ describe('changed', () => {
     const oldVnode = h('p', null);
     const newVnode = h('span', null);
     parent.appendChild(document.createElement('p'));
+
     patch(parent, newVnode, oldVnode, 0);
+
     expect(parent.firstElementChild?.tagName).toBe('SPAN');
   });
 
@@ -173,7 +205,9 @@ describe('changed', () => {
     const newVnode = h('div', { class: 'x' });
     const el = document.createElement('div');
     parent.appendChild(el);
+
     patch(parent, newVnode, oldVnode, 0);
+
     expect(parent.firstElementChild).toBe(el);
   });
 });
@@ -185,8 +219,10 @@ describe('patchProps', () => {
     const newVnode = h('p', null);
     const vnode = h('div', null, oldVnode);
     const el = createElement(vnode) as HTMLElement;
+
     patch(el, newVnode, oldVnode, 0);
     (el.firstElementChild as HTMLElement)?.click();
+
     expect(el.firstElementChild?.getAttribute('class')).toBeNull;
     expect(handleClick).not.toHaveBeenCalled();
   });
@@ -197,8 +233,10 @@ describe('patchProps', () => {
     const newVnode = h('p', { class: 'foo', onclick: handleClick });
     const vnode = h('div', null, oldVnode);
     const el = createElement(vnode) as HTMLElement;
+
     patch(el, newVnode, oldVnode, 0);
     (el.firstElementChild as HTMLElement)?.click();
+
     expect(el.firstElementChild?.getAttribute('class')).toBe('foo');
     expect(handleClick).toHaveBeenCalledTimes(1);
   });

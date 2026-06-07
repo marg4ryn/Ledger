@@ -40,14 +40,14 @@ export function patch(
   oldVnode: VNode | null | undefined,
   index: number,
 ): void {
-  const currentEl = parent.childNodes[index] as HTMLElement;
-
   if (!oldVnode) {
     if (newVnode) {
       parent.appendChild(createElement(newVnode));
     }
     return;
   }
+
+  const currentEl = parent.childNodes[index] as HTMLElement;
 
   if (!newVnode) {
     parent.removeChild(currentEl);
