@@ -18,8 +18,8 @@ function handleFilter(e: InputEvent): void {
 }
 
 function handleRemove(e: MouseEvent): void {
-  const target = e.currentTarget as HTMLElement;
-  const li = target.closest('li') as HTMLLIElement | null;
+  const target = e.target as HTMLElement;
+  const li = target.closest('li') as HTMLElement | null;
   if (!li) return;
   actions.removeExpense(li.dataset.id!);
 }
