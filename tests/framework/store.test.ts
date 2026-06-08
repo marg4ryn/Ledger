@@ -1,11 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createStore } from '../../src/framework/store.js';
 
-describe('createStore', () => {
-  vi.mock('../../src/framework/scheduler.js', () => ({
-    schedule: (fn: () => void) => fn(),
-  }));
+vi.mock('../../src/framework/scheduler.js', () => ({
+  schedule: (fn: () => void) => fn(),
+}));
 
+describe('createStore', () => {
   it('returns initial state', () => {
     const store = createStore({ count: 0 });
 

@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect } from 'vitest';
 import {
   h,
   createElement,
@@ -8,32 +8,23 @@ import {
 } from '../../src/framework/vdom';
 
 describe('h', () => {
-  it('creates a VElement with proper type', () => {
+  it('creates a VElement with only a type', () => {
     const vnode = h('div', null);
 
     expect(vnode.type).toBe('div');
+    expect(vnode.props).toEqual({});
+    expect(vnode.children).toEqual([]);
   });
 
-  it('creates a VElement with proper props', () => {
-    const vnode = h('div', { class: 'test' });
+  it('creates a VElement with multiple props', () => {
+    const vnode = h('div', { class: 'foo', id: 42 });
 
-    expect(vnode.props).toStrictEqual({ class: 'test' });
-  });
-
-  it('creates a VElement without props', () => {
-    const vnode = h('div', null);
-
-    expect(vnode.props).toStrictEqual({});
-  });
-
-  it('creates a VElement without children', () => {
-    const vnode = h('div', null);
-
-    expect(vnode.children).toStrictEqual([]);
+    expect(vnode.props).toEqual({ class: 'foo', id: 42 });
   });
 
   it('creates a VElement with multiple children', () => {
-    const vnode = h('div', null, h('p', null), h('span', null));
+    const children = [h('p', null), h('span', null)];
+    const vnode = h('div', null, ...children);
 
     expect(vnode.children).toHaveLength(2);
     expect(vnode.children[0].type).toBe('p');
@@ -42,15 +33,16 @@ describe('h', () => {
 
   it('flattens nested children arrays', () => {
     const children = [h('p', null), h('span', null)];
-    const vnode = h('div', null, ...children);
+    const vnode = h('div', null, children);
 
     expect(vnode.children).toHaveLength(2);
     expect(vnode.children[0].type).toBe('p');
+    expect(vnode.children[1].type).toBe('span');
   });
 });
 
 describe('createElement', () => {
-  it('creates a Text element', () => {
+  it('creates a Text element from a string', () => {
     const el = createElement('test');
 
     expect(el.textContent).toBe('test');
@@ -62,11 +54,12 @@ describe('createElement', () => {
     expect(el.textContent).toBe('42');
   });
 
-  it('creates a HTMLElement with proper props', () => {
+  it('creates a HTMLElement with props', () => {
     const vnode = h('p', { class: 'test' });
 
     const el = createElement(vnode) as HTMLElement;
 
+    expect(el.tagName).toBe('P');
     expect(el.getAttribute('class')).toBe('test');
   });
 
@@ -80,13 +73,15 @@ describe('createElement', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('recursively creates and attaches HTMLElements', () => {
-    const vnode = h('div', null, h('p', null));
+  it('creates child HTMLElements', () => {
+    const children = [h('p', null), h('span', null)];
+    const vnode = h('div', null, ...children);
 
     const el = createElement(vnode) as HTMLElement;
 
-    expect(el.childNodes).toHaveLength(1);
-    expect(el.firstElementChild?.tagName).toBe('P');
+    expect(el.childNodes).toHaveLength(2);
+    expect(el.children[0].tagName).toBe('P');
+    expect(el.children[1].tagName).toBe('SPAN');
   });
 });
 
@@ -135,19 +130,11 @@ describe('patch', () => {
     expect(el.firstElementChild?.getAttribute('class')).toBe('bar');
   });
 
-  it('recursively patches children', () => {
-    const oldVnode = h(
-      'div',
-      null,
-      h('p', { class: 'foo' }),
-      h('p', { class: 'foo' }),
-    );
-    const newVnode = h(
-      'div',
-      null,
-      h('p', { class: 'foo' }),
-      h('p', { class: 'bar' }),
-    );
+  it('updates children', () => {
+    const oldChildren = [h('p', { class: 'foo' }), h('p', { class: 'foo' })];
+    const newChildren = [h('p', { class: 'foo' }), h('p', { class: 'bar' })];
+    const oldVnode = h('div', null, ...oldChildren);
+    const newVnode = h('div', null, ...newChildren);
     const el = createElement(h('div', null, oldVnode)) as HTMLElement;
     const children = () => el.firstElementChild?.children;
 
@@ -159,12 +146,6 @@ describe('patch', () => {
 });
 
 describe('changed', () => {
-  let parent: HTMLElement;
-
-  beforeEach(() => {
-    parent = document.createElement('div');
-  });
-
   it('returns true when node types differ', () => {
     const oldVnode = 'text';
     const newVnode = h('span', null);
@@ -177,11 +158,10 @@ describe('changed', () => {
   it('returns true when strings differ', () => {
     const oldVnode = 'foo';
     const newVnode = 'bar';
-    parent.appendChild(document.createTextNode('foo'));
 
-    patch(parent, newVnode, oldVnode, 0);
+    const res = changed(newVnode, oldVnode);
 
-    expect(parent.firstChild?.textContent).toBe('bar');
+    expect(res).toBeTruthy();
   });
 
   it('returns false when strings are equal', () => {
