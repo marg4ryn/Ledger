@@ -12,7 +12,7 @@ function formatPrice(price: number): string {
 export function ExpenseItem({ id, name, price }: Expense): VElement {
   return h(
     'li',
-    { 'data-id': id },
+    { 'data-id': id, title: 'Remove item' },
     h('span', null, name),
     h('span', null, formatPrice(price)),
   );

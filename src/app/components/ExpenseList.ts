@@ -48,6 +48,7 @@ export function ExpenseList(state: ExpenseStore): VElement {
         'button',
         {
           type: 'button',
+          title: 'Sort items by name',
           id: 'sortByNameBtn',
           class: 'button',
           onclick: handleNameSort,
@@ -56,7 +57,7 @@ export function ExpenseList(state: ExpenseStore): VElement {
       ),
       h(
         'div',
-        { class: 'filterContainer' },
+        { class: 'filterContainer', title: 'Filter items' },
         h('label', { for: 'filter' }, 'Filter'),
         h('input', {
           type: 'text',
@@ -69,6 +70,7 @@ export function ExpenseList(state: ExpenseStore): VElement {
         'button',
         {
           type: 'button',
+          title: 'Sort items by price',
           id: 'sortByPriceBtn',
           class: 'button',
           onclick: handlePriceSort,

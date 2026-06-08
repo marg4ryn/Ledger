@@ -59,7 +59,7 @@ export function ExpenseForm(): VElement {
             required: 'required',
           }),
         ),
-        h('button', { type: 'submit' }, 'Add'),
+        h('button', { type: 'submit', title: 'Add item' }, 'Add'),
       ),
     ),
   );
