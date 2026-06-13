@@ -2,11 +2,13 @@ import { h } from '@framework/vdom.js';
 import { Expense } from '@app/types.js';
 import { VElement } from '@framework/types.js';
 
+const usdFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
 function formatPrice(price: number): string {
-  return Number(price).toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  });
+  return usdFormatter.format(price);
 }
 
 export function ExpenseItem({ id, name, price }: Expense): VElement {
