@@ -1,5 +1,5 @@
 import { h } from '@framework/vdom.js';
-import { actions } from '@app/store.js';
+import { actions } from '@app/main.js';
 import { ExpenseItem } from '@app/components/ExpenseItem.js';
 import { ExpenseStore, Expense } from '@app/types.js';
 import { VElement } from '@framework/types.js';

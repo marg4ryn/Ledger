@@ -1,5 +1,5 @@
 import { h } from '@framework/vdom.js';
-import { actions } from '@app/store.js';
+import { actions } from '@app/main.js';
 import { VElement } from '@framework/types.js';
 
 export function handleSubmit(e: SubmitEvent): void {
