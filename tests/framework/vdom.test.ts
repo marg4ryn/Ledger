@@ -18,12 +18,12 @@ describe('h', () => {
 
   it('creates a VElement with multiple props', () => {
     const vnode = h('div', { class: 'foo', id: 42 });
-
     expect(vnode.props).toEqual({ class: 'foo', id: 42 });
   });
 
   it('creates a VElement with multiple children', () => {
     const children = [h('p', null), h('span', null)];
+
     const vnode = h('div', null, ...children);
 
     expect(vnode.children).toHaveLength(2);
@@ -33,6 +33,7 @@ describe('h', () => {
 
   it('flattens nested children arrays', () => {
     const children = [h('p', null), h('span', null)];
+
     const vnode = h('div', null, children);
 
     expect(vnode.children).toHaveLength(2);
@@ -44,13 +45,11 @@ describe('h', () => {
 describe('createElement', () => {
   it('creates a Text element from a string', () => {
     const el = createElement('test');
-
     expect(el.textContent).toBe('test');
   });
 
   it('creates a Text element from a number', () => {
     const el = createElement(42);
-
     expect(el.textContent).toBe('42');
   });
 

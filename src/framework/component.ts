@@ -1,4 +1,4 @@
-import { createElement, patch } from '@framework/vdom.js';
+import { patch } from '@framework/vdom.js';
 import type { Store, VNode, RenderFn, Component } from '@framework/types.js';
 
 export function createComponent<T>(

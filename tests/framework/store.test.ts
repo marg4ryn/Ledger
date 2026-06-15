@@ -8,7 +8,6 @@ vi.mock('../../src/framework/scheduler.js', () => ({
 describe('createStore', () => {
   it('returns initial state', () => {
     const store = createStore({ count: 0 });
-
     expect(store.get()).toEqual({ count: 0 });
   });
 
@@ -53,8 +52,8 @@ describe('createStore', () => {
   it('unsubscribes listener', () => {
     const store = createStore(0);
     const listener = vi.fn();
-
     const unsubscribe = store.subscribe(listener);
+
     unsubscribe();
     store.set((x: number) => x + 1);
 
@@ -63,8 +62,8 @@ describe('createStore', () => {
 
   it('clones initial state', () => {
     const initial = { count: 0 };
-
     const store = createStore(initial);
+
     initial.count = 999;
 
     expect(store.get()).toEqual({ count: 0 });

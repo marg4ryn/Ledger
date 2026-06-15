@@ -1,20 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createComponent } from '../../src/framework/component.js';
+import { patch } from '../../src/framework/vdom.js';
 import type { Store, VNode } from '../../src/framework/types.js';
 
 vi.mock('../../src/framework/vdom.js', () => ({
-  createElement: (vnode: VNode) => {
-    const el = document.createElement('div');
-    el.textContent = String(
-      typeof vnode === 'object' && 'type' in vnode ? vnode.type : vnode,
-    );
-    return el;
-  },
   patch: vi.fn(),
-}));
-
-vi.mock('../../src/framework/scheduler.js', () => ({
-  schedule: (fn: () => void) => fn(),
 }));
 
 function makeStore<T>(initial: T): Store<T> {
@@ -34,12 +24,14 @@ function makeStore<T>(initial: T): Store<T> {
 }
 
 const simpleVNode: VNode = { type: 'div', props: {}, children: [] };
+const mockPatch = vi.mocked(patch);
 
 describe('createComponent', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
     container = document.createElement('div');
+    mockPatch.mockClear();
   });
 
   it('mounts and renders initial state', () => {
@@ -83,5 +75,61 @@ describe('createComponent', () => {
     store.set((s) => ({ count: s.count + 1 }));
 
     expect(render).toHaveBeenLastCalledWith({ count: 1 });
+  });
+
+  it('calls patch on initial mount with null oldVnode', () => {
+    const store = makeStore(0);
+    const render = vi.fn().mockReturnValue(simpleVNode);
+    createComponent(store, render).mount(container);
+
+    expect(mockPatch).toHaveBeenCalledOnce();
+    expect(mockPatch).toHaveBeenCalledWith(container, simpleVNode, null, 0);
+  });
+
+  it('calls patch on state update with previous vnode as oldVnode', () => {
+    const store = makeStore(0);
+    const firstVNode: VNode = {
+      type: 'div',
+      props: { id: 'first' },
+      children: [],
+    };
+    const secondVNode: VNode = {
+      type: 'div',
+      props: { id: 'second' },
+      children: [],
+    };
+    const render = vi
+      .fn()
+      .mockReturnValueOnce(firstVNode)
+      .mockReturnValueOnce(secondVNode);
+
+    createComponent(store, render).mount(container);
+    store.set((x) => x + 1);
+
+    expect(mockPatch).toHaveBeenCalledTimes(2);
+    expect(mockPatch).toHaveBeenNthCalledWith(
+      1,
+      container,
+      firstVNode,
+      null,
+      0,
+    );
+    expect(mockPatch).toHaveBeenNthCalledWith(
+      2,
+      container,
+      secondVNode,
+      firstVNode,
+      0,
+    );
+  });
+
+  it('passes container element to every patch call', () => {
+    const store = makeStore(0);
+    createComponent(store, () => simpleVNode).mount(container);
+    store.set((x) => x + 1);
+
+    mockPatch.mock.calls.forEach((call) => {
+      expect(call[0]).toBe(container);
+    });
   });
 });
