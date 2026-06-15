@@ -2,9 +2,9 @@ import { createStore } from '@framework/store.js';
 import { storage } from '@app/storage.js';
 import { SortBy, ExpenseStore } from './types.js';
 
-export function createExpenseStore(initialStorage = storage) {
+export function createExpenseStore(s = storage) {
   const store = createStore<ExpenseStore>({
-    expenses: initialStorage.load(),
+    expenses: s.load(),
     filter: '',
     sort: { by: 'name', asc: true },
   });
@@ -22,7 +22,7 @@ export function createExpenseStore(initialStorage = storage) {
           },
         ],
       }));
-      storage.save(store.get().expenses);
+      s.save(store.get().expenses);
     },
 
     removeExpense(id: string): void {
@@ -30,7 +30,7 @@ export function createExpenseStore(initialStorage = storage) {
         ...state,
         expenses: state.expenses.filter((e) => e.id !== id),
       }));
-      storage.save(store.get().expenses);
+      s.save(store.get().expenses);
     },
 
     setFilter(value: string): void {
