@@ -1,6 +1,8 @@
 # Ledger
 
-A simple reactive UI framework written in vanilla TypeScript. An educational project demonstrating how modern reactive frameworks work.
+A simple reactive UI framework written in vanilla TypeScript. An educational project demonstrating how modern reactive frameworks work. To demonstrate how the framework works, a simple application for managing an expense list was created.
+
+![screeenshot](public/screenshot.png)
 
 ## Architecture
 
@@ -27,8 +29,6 @@ src/
     main.ts        ← entry point
 index.html
 ```
-
----
 
 ## Framework modules
 
@@ -109,36 +109,12 @@ API:
 - `createComponent(store, renderFn)` — takes a store and a `state => vnode` function
 - `mount(el)` — attaches the component to a DOM element and subscribes to the store
 
----
-
-## Application Components
-
-A component is a function that accepts state and returns a vDOM:
-
-```typescript
-function MyComponent(state) {
-  return h('div', { class: 'container' }, h('p', null, state.message));
-}
-```
-
-Events are passed through props with the prefix `on`:
-
-```typescript
-function handleClick() {
-  actions.doSomething();
-}
-
-h('button', { onclick: handleClick }, 'Click me!');
-```
-
----
-
 ## Launch
 
 Install TypeScript:
 
 ```bash
-npm install typescript --save-dev
+npm install -D typescript
 ```
 
 Run TypeScript in watch mode:
@@ -149,7 +125,13 @@ npm run watch
 
 Open the application using Live Server in VS Code (or any static server) to serve `index.html`. The browser loads compiled files from `/dist`, which are continuously updated by the TypeScript watcher.
 
----
+## Tests
+
+Tests for all parts of the application were written in Vitest. Running:
+
+```bash
+npm test
+```
 
 ## Limitations
 
