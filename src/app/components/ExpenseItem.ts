@@ -7,7 +7,7 @@ const usdFormatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 });
 
-function formatPrice(price: number): string {
+export function formatPrice(price: number): string {
   return usdFormatter.format(price);
 }
 

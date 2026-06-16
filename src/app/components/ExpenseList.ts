@@ -4,27 +4,27 @@ import { ExpenseItem } from '@app/components/ExpenseItem.js';
 import { ExpenseStore, Expense } from '@app/types.js';
 import { VElement } from '@framework/types.js';
 
-function handleNameSort(): void {
+export function handleNameSort(): void {
   actions.setSort('name');
 }
 
-function handlePriceSort(): void {
+export function handlePriceSort(): void {
   actions.setSort('price');
 }
 
-function handleFilter(e: InputEvent): void {
+export function handleFilter(e: InputEvent): void {
   const input = e.currentTarget as HTMLInputElement;
   actions.setFilter(input.value.trim().toLowerCase());
 }
 
-function handleRemove(e: MouseEvent): void {
+export function handleRemove(e: MouseEvent): void {
   const target = e.target as HTMLElement;
   const li = target.closest('li') as HTMLElement | null;
   if (!li) return;
   actions.removeExpense(li.dataset.id!);
 }
 
-function getVisibleExpenses(state: ExpenseStore): Expense[] {
+export function getVisibleExpenses(state: ExpenseStore): Expense[] {
   return [...state.expenses]
     .filter((e) => e.name.toLowerCase().includes(state.filter))
     .sort((a, b) => {
